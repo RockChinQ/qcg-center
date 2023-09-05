@@ -1,0 +1,103 @@
+package api
+
+import (
+	"log"
+	database "qcg-center/src/database"
+	util "qcg-center/src/util"
+	"strconv"
+	"time"
+
+	"github.com/gin-gonic/gin"
+)
+
+type WebAPI struct {
+	Cfg *util.Config
+
+	// 数据库管理器
+	dbmgr database.IDatabaseManager
+
+	// port
+	port int
+
+	// addr
+	addr string
+
+	r *gin.Engine
+}
+
+// 初始化WebAPI
+func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
+
+	m.dbmgr = dbmgr
+
+	m.port = m.Cfg.API.Port
+	m.addr = m.Cfg.API.Listen
+
+	r := gin.Default()
+
+	r.GET("/legacy/report", func(c *gin.Context) {
+		var report LegacyReport
+
+		if err := c.ShouldBind(&report); err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
+		// 保存到数据库
+		var installerReport database.InstallerReport
+
+		installerReport.OSName = report.OSName
+		installerReport.Arch = report.Arch
+		installerReport.Timestamp = report.Timestamp
+		installerReport.Version = report.Version
+		installerReport.Message = report.Message
+		installerReport.RemoteAddr = c.Request.RemoteAddr
+
+		err := m.dbmgr.StoreInstallerReport(&installerReport)
+
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, gin.H{"status": "ok"})
+	})
+
+	r.GET("/legacy/usage", func(c *gin.Context) {
+		var usage LegacyUsage
+
+		if err := c.ShouldBind(&usage); err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
+		// 保存到数据库
+		var qchatgptUsage database.QChatGPTUsage
+
+		qchatgptUsage.ServiceName = usage.ServiceName
+		qchatgptUsage.Version = usage.Version
+		qchatgptUsage.Count = usage.Count
+		qchatgptUsage.MsgSource = usage.MsgSource
+		qchatgptUsage.Timestamp = time.Now().Unix()
+		qchatgptUsage.RemoteAddr = c.Request.RemoteAddr
+
+		err := m.dbmgr.StoreQChatGPTUsage(&qchatgptUsage)
+
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, gin.H{"status": "ok"})
+	})
+
+	m.r = r
+
+	return nil
+}
+
+// 启动WebAPI服务
+func (m *WebAPI) Serve() error {
+	log.Println("WebAPI listening on " + m.addr + ":" + strconv.Itoa(m.port))
+	return m.r.Run(m.addr + ":" + strconv.Itoa(m.port))
+}
