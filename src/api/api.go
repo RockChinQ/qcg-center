@@ -74,7 +74,10 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 			return
 		}
 
-		c.JSON(200, gin.H{"status": "ok"})
+		// code 200
+		c.Writer.WriteHeader(200)
+		// 返回纯文字ok，不是json
+		c.Writer.WriteString("ok")
 	})
 
 	r.GET("/legacy/usage", func(c *gin.Context) {
@@ -115,7 +118,10 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 			return
 		}
 
-		c.JSON(200, gin.H{"status": "ok"})
+		// code 200
+		c.Writer.WriteHeader(200)
+		// 返回纯文字ok，不是json
+		c.Writer.WriteString("ok")
 	})
 
 	m.r = r
