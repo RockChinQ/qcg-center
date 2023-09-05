@@ -3,7 +3,7 @@ name: Release Docker Image
 on:
   push:  # 仅修改.go文件时触发
     branches:
-      - master
+      - main
     paths:
       - src/**.go
 
