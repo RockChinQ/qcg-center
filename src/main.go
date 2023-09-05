@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	log.Println("Launching QCG Center...")
+	log.Println("Launching QChatGPT Center...")
 
 	// 检查并加载配置文件
 	_, created, err := util.EnsureConfigFile()
