@@ -39,7 +39,8 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		var report LegacyReport
 
 		if err := c.ShouldBind(&report); err != nil {
-			c.JSON(400, gin.H{"error": err.Error()})
+			log.Println(err)
+			c.JSON(400, gin.H{"error": "missing params."})
 			return
 		}
 
@@ -56,7 +57,8 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		err := m.dbmgr.StoreInstallerReport(&installerReport)
 
 		if err != nil {
-			c.JSON(500, gin.H{"error": err.Error()})
+			log.Println(err)
+			c.JSON(500, gin.H{"error": "internal error."})
 			return
 		}
 
@@ -67,7 +69,8 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		var usage LegacyUsage
 
 		if err := c.ShouldBind(&usage); err != nil {
-			c.JSON(400, gin.H{"error": err.Error()})
+			log.Println(err)
+			c.JSON(400, gin.H{"error": "missing params."})
 			return
 		}
 
@@ -84,7 +87,8 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		err := m.dbmgr.StoreQChatGPTUsage(&qchatgptUsage)
 
 		if err != nil {
-			c.JSON(500, gin.H{"error": err.Error()})
+			log.Println(err)
+			c.JSON(500, gin.H{"error": "internal error."})
 			return
 		}
 
