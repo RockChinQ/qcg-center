@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  qcg-center:
+    build: .
+    ports:
+      - "8989:8989"
+    volumes:
+      - ./config.yml:/app/qcg-center/config.yml
+    environment:
+      - GIN_MODE=release
