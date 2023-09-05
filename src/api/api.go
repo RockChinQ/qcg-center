@@ -5,6 +5,7 @@ import (
 	database "qcg-center/src/database"
 	util "qcg-center/src/util"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -52,7 +53,12 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		installerReport.Timestamp = report.Timestamp
 		installerReport.Version = report.Version
 		installerReport.Message = report.Message
-		installerReport.RemoteAddr = c.Request.RemoteAddr
+		// installerReport.RemoteAddr = c.Request.RemoteAddr
+		remoteAddr := c.Request.RemoteAddr
+		// 分割IP和端口
+		remoteAddrSlice := strings.Split(remoteAddr, ":")
+		// 只取IP
+		installerReport.RemoteAddr = remoteAddrSlice[0]
 
 		err := m.dbmgr.StoreInstallerReport(&installerReport)
 
@@ -82,7 +88,12 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		qchatgptUsage.Count = usage.Count
 		qchatgptUsage.MsgSource = usage.MsgSource
 		qchatgptUsage.Timestamp = time.Now().Unix()
-		qchatgptUsage.RemoteAddr = c.Request.RemoteAddr
+		// qchatgptUsage.RemoteAddr = c.Request.RemoteAddr
+		remoteAddr := c.Request.RemoteAddr
+		// 分割IP和端口
+		remoteAddrSlice := strings.Split(remoteAddr, ":")
+		// 只取IP
+		qchatgptUsage.RemoteAddr = remoteAddrSlice[0]
 
 		err := m.dbmgr.StoreQChatGPTUsage(&qchatgptUsage)
 
