@@ -50,7 +50,9 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 
 		installerReport.OSName = report.OSName
 		installerReport.Arch = report.Arch
-		installerReport.Timestamp = report.Timestamp
+
+		local := time.FixedZone("CST", 8*3600)
+		installerReport.Timestamp = time.Now().In(local).Unix()
 		installerReport.Version = report.Version
 		installerReport.Message = report.Message
 
@@ -96,7 +98,9 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		qchatgptUsage.Version = usage.Version
 		qchatgptUsage.Count = usage.Count
 		qchatgptUsage.MsgSource = usage.MsgSource
-		qchatgptUsage.Timestamp = time.Now().Unix()
+
+		local := time.FixedZone("CST", 8*3600)
+		qchatgptUsage.Timestamp = time.Now().In(local).Unix()
 
 		// 从header取到x-forwarded-for
 		qchatgptUsage.RemoteAddr = c.Request.Header.Get("x-forwarded-for")
