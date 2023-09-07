@@ -32,7 +32,6 @@ func main() {
 	}
 
 	// 初始化数据库管理器
-
 	var dbmgr database.IDatabaseManager
 
 	dbmgr = &database.MongoDBManager{
