@@ -8,12 +8,11 @@ import (
 )
 
 type DailyAnalysis struct {
-	Begin             time.Time      `bson:"begin"`
-	Duration          int            `bson:"duration"`
-	UsageCount        int            `bson:"usage_count"`
-	ActiveHostCount   int            `bson:"active_host_count"`
-	NewHostCount      int            `bson:"new_host_count"`
-	ServiceUsageCount map[string]int `bson:"service_usage_count"`
+	Begin           time.Time `bson:"begin"`
+	Duration        int       `bson:"duration"`
+	UsageCount      int       `bson:"usage_count"`
+	ActiveHostCount int       `bson:"active_host_count"`
+	NewHostCount    int       `bson:"new_host_count"`
 }
 
 // 计算给定时间段的以下数据：
@@ -75,43 +74,6 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 	}
 
 	result.NewHostCount = int(newcount)
-
-	// 计算每种服务的使用量记录数
-	// 以service_name进行聚合
-	sercount, err := dbmgr.Client.Database("qcg-center-records").Collection("qchatgpt-usage").Aggregate(context.TODO(), []map[string]interface{}{
-		{
-			"$match": map[string]interface{}{
-				"timestamp": map[string]interface{}{
-					"$gte": int64(begin.Unix()),
-					"$lt":  int64(begin.Add(duration).Unix()),
-				},
-			},
-		},
-		{
-			"$group": map[string]interface{}{
-				"_id": "$service_name",
-				"count": map[string]interface{}{
-					"$sum": 1,
-				},
-			},
-		},
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	result.ServiceUsageCount = make(map[string]int)
-	for sercount.Next(context.Background()) {
-		var res map[string]interface{}
-		err = sercount.Decode(&res)
-
-		if err != nil {
-			return nil, err
-		}
-
-		result.ServiceUsageCount[res["_id"].(string)] = int(res["count"].(int32))
-	}
 
 	return result, nil
 }
