@@ -61,28 +61,20 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 	// fmt.Println("ActiveHostCount:", result.ActiveHostCount)
 
 	// 计算新增主机数
-	// 以remote_addr字段去重
-	// 判断此时间段每个remote_addr在此之前是否有记录
-	// 有则不计入新增主机数
-	count := 0
-	for _, host := range acthost {
-		check, err := dbmgr.Client.Database("qcg-center-records").Collection("qchatgpt-usage").CountDocuments(context.TODO(), map[string]interface{}{
-			"remote_addr": host,
-			"timestamp": map[string]interface{}{
-				"$lt": int64(begin.Unix()),
-			},
-		})
+	// 从analysis_usage_remote_addrs查找created_at在此时段的记录数量
 
-		if err != nil {
-			return nil, err
-		}
+	newcount, err := dbmgr.Client.Database("qcg-center-records").Collection("analysis_usage_remote_addrs").CountDocuments(context.TODO(), map[string]interface{}{
+		"created_at": map[string]interface{}{
+			"$gte": begin,
+			"$lt":  begin.Add(duration),
+		},
+	})
 
-		if check == 0 {
-			count++
-		}
+	if err != nil {
+		return nil, err
 	}
 
-	result.NewHostCount = count
+	result.NewHostCount = int(newcount)
 
 	// 计算每种服务的使用量记录数
 	// 以service_name进行聚合

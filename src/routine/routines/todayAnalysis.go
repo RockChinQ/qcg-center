@@ -19,8 +19,8 @@ func (r *TodayAnalyzeRoutine) Init(cfg *util.Config, db *database.MongoDBManager
 	r.Cfg = cfg
 	r.DBMgr = db
 
-	// return "* 0,8,12,16,20 * * *", nil
-	return "21 19 * * *", nil
+	return "* 0,1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *", nil
+	// return "45 19 * * *", nil
 }
 
 func (r *TodayAnalyzeRoutine) Run() error {
