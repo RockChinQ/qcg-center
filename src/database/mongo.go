@@ -34,6 +34,28 @@ func (m *MongoDBManager) StoreInstallerReport(report *InstallerReport) error {
 
 	_, err := coll.InsertOne(context.TODO(), report)
 
+	if err != nil {
+		return err
+	}
+
+	// 从analysis_reports_remote_addrs中查找是否有相同的remote_addr
+	// 无则插入(remote_addr, 当前时间)
+	check, err := m.Client.Database("qcg-center-records").Collection("analysis_reports_remote_addrs").Find(context.TODO(), map[string]interface{}{
+		"remote_addr": report.RemoteAddr,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	if !check.Next(context.Background()) {
+		// 无记录
+		_, err = m.Client.Database("qcg-center-records").Collection("analysis_reports_remote_addrs").InsertOne(context.TODO(), map[string]interface{}{
+			"remote_addr": report.RemoteAddr,
+			"created_at":  report.Timestamp,
+		})
+	}
+
 	return err
 }
 
@@ -41,6 +63,28 @@ func (m *MongoDBManager) StoreQChatGPTUsage(usage *QChatGPTUsage) error {
 	coll := m.Client.Database("qcg-center-records").Collection("qchatgpt-usage")
 
 	_, err := coll.InsertOne(context.TODO(), usage)
+
+	if err != nil {
+		return err
+	}
+
+	// 从analysis_usage_remote_addrs中查找是否有相同的remote_addr
+	// 无则插入(remote_addr, 当前时间)
+	check, err := m.Client.Database("qcg-center-records").Collection("analysis_usage_remote_addrs").Find(context.TODO(), map[string]interface{}{
+		"remote_addr": usage.RemoteAddr,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	if !check.Next(context.Background()) {
+		// 无记录
+		_, err = m.Client.Database("qcg-center-records").Collection("analysis_usage_remote_addrs").InsertOne(context.TODO(), map[string]interface{}{
+			"remote_addr": usage.RemoteAddr,
+			"created_at":  usage.Timestamp,
+		})
+	}
 
 	return err
 }
