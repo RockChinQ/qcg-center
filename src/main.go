@@ -74,6 +74,7 @@ func main() {
 func InitializeRoutines(cfg *util.Config, db *database.MongoDBManager) {
 	// 注册routines
 	routine.Register("TodayAnalysis", &routines.TodayAnalyzeRoutine{})
+	routine.Register("YesterdayAnalysis", &routines.YesterdayAnalyzeRoutine{})
 
 	// 启动routines
 	routine.ScheduleAll(cfg, db)

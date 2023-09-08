@@ -32,20 +32,25 @@ func ScheduleAll(cfg *util.Config, dbmgr *database.MongoDBManager) {
 	}
 
 	for name, routine := range Routines {
-		log.Println("Scheduling routine", name)
+
+		// 克隆name和routine
+		cname := name
+		croutine := routine
+
+		log.Println("Scheduling routine", cname)
 		cronExpr, err := routine.Init(cfg, dbmgr)
 		if err != nil {
-			log.Printf("routine %s init failed: %s", name, err)
+			log.Printf("routine %s init failed: %s", cname, err)
 			panic(err)
 		}
 
 		cronHost.AddFunc(cronExpr, func() {
-			log.Println("Running routine", name)
-			err := routine.Run()
+			log.Println("Running routine", cname)
+			err := croutine.Run()
 			if err != nil {
-				log.Printf("routine %s run failed: %s", name, err)
+				log.Printf("routine %s run failed: %s", cname, err)
 			} else {
-				log.Println("Routine", name, "finished")
+				log.Println("Routine", cname, "finished")
 			}
 		})
 	}
