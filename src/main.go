@@ -5,6 +5,8 @@ import (
 	"os"
 	"qcg-center/src/api"
 	"qcg-center/src/database"
+	"qcg-center/src/routine"
+	"qcg-center/src/routine/routines"
 	"qcg-center/src/util"
 )
 
@@ -32,9 +34,8 @@ func main() {
 	}
 
 	// 初始化数据库管理器
-	var dbmgr database.IDatabaseManager
 
-	dbmgr = &database.MongoDBManager{
+	dbmgr := &database.MongoDBManager{
 		Cfg: cfg,
 	}
 
@@ -58,10 +59,22 @@ func main() {
 		panic(err)
 	}
 
+	// 初始化routines
+	InitializeRoutines(cfg, dbmgr)
+	log.Printf("Routines scheduled.")
+
 	err = apimgr.Serve()
 
 	if err != nil {
 		log.Println("Failed to serve API")
 		panic(err)
 	}
+}
+
+func InitializeRoutines(cfg *util.Config, db *database.MongoDBManager) {
+	// 注册routines
+	routine.Register("TodayAnalysis", &routines.TodayAnalyzeRoutine{})
+
+	// 启动routines
+	routine.ScheduleAll(cfg, db)
 }
