@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"time"
 
 	"qcg-center/src/util"
 
@@ -52,7 +53,8 @@ func (m *MongoDBManager) StoreInstallerReport(report *InstallerReport) error {
 		// 无记录
 		_, err = m.Client.Database("qcg-center-records").Collection("analysis_reports_remote_addrs").InsertOne(context.TODO(), map[string]interface{}{
 			"remote_addr": report.RemoteAddr,
-			"created_at":  report.Timestamp,
+			// 使用report.Timestamp
+			"created_at": time.Unix(report.Timestamp, 0),
 		})
 	}
 
@@ -82,7 +84,7 @@ func (m *MongoDBManager) StoreQChatGPTUsage(usage *QChatGPTUsage) error {
 		// 无记录
 		_, err = m.Client.Database("qcg-center-records").Collection("analysis_usage_remote_addrs").InsertOne(context.TODO(), map[string]interface{}{
 			"remote_addr": usage.RemoteAddr,
-			"created_at":  usage.Timestamp,
+			"created_at":  time.Unix(usage.Timestamp, 0),
 		})
 	}
 
