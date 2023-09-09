@@ -2,6 +2,7 @@ package routines
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"qcg-center/src/database"
@@ -19,8 +20,8 @@ type DailyAnalysis struct {
 // - 使用量记录数
 // - 活跃主机数
 // - 新增主机数(ever)
-// - 每种服务的使用量记录数
 func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManager) (*DailyAnalysis, error) {
+
 	result := &DailyAnalysis{
 		Begin:    begin,
 		Duration: int(duration.Seconds()),
@@ -29,8 +30,8 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 	// 计算使用量记录数
 	recnum, err := dbmgr.Client.Database("qcg-center-records").Collection("qchatgpt-usage").CountDocuments(context.TODO(), map[string]interface{}{
 		"timestamp": map[string]interface{}{
-			"$gte": int64(begin.Unix()),
-			"$lt":  int64(begin.Add(duration).Unix()),
+			"$gte": int64(begin.Add(-8 * time.Hour).Unix()),
+			"$lt":  int64(begin.Add(-8 * time.Hour).Add(duration).Unix()),
 		},
 	})
 
@@ -46,8 +47,8 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 	// 以remote_addr字段去重
 	acthost, err := dbmgr.Client.Database("qcg-center-records").Collection("qchatgpt-usage").Distinct(context.TODO(), "remote_addr", map[string]interface{}{
 		"timestamp": map[string]interface{}{
-			"$gte": int64(begin.Unix()),
-			"$lt":  int64(begin.Add(duration).Unix()),
+			"$gte": int64(begin.Add(-8 * time.Hour).Unix()),
+			"$lt":  int64(begin.Add(-8 * time.Hour).Add(duration).Unix()),
 		},
 	})
 
@@ -64,8 +65,8 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 
 	newcount, err := dbmgr.Client.Database("qcg-center-records").Collection("analysis_usage_remote_addrs").CountDocuments(context.TODO(), map[string]interface{}{
 		"created_at": map[string]interface{}{
-			"$gte": begin,
-			"$lt":  begin.Add(duration),
+			"$gte": begin.Add(-8 * time.Hour),
+			"$lt":  begin.Add(-8 * time.Hour).Add(duration),
 		},
 	})
 
@@ -74,6 +75,10 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 	}
 
 	result.NewHostCount = int(newcount)
+
+	// 输出格式化后的结果
+	// 包含：开始时间、时长、使用量记录数、活跃主机数、新增主机数
+	log.Printf("DailyAnalysis: %s, %d, %d, %d, %d\n", result.Begin.Format("2006-01-02 15:04:05"), result.Duration, result.UsageCount, result.ActiveHostCount, result.NewHostCount)
 
 	return result, nil
 }
