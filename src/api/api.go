@@ -128,6 +128,15 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		c.Writer.WriteString("ok")
 	})
 
+	grafanaRoot := GrafanaRoot(m)
+	grafanaTodayUsageStatic := GrafanaTodayUsageStatic(m)
+
+	r.GET("/grafana", grafanaRoot)
+	r.POST("/grafana", grafanaRoot)
+
+	r.GET("/grafana/today_usage_static", grafanaTodayUsageStatic)
+	r.POST("/grafana/today_usage_static", grafanaTodayUsageStatic)
+
 	m.r = r
 
 	return nil

@@ -10,4 +10,6 @@ type IDatabaseManager interface {
 
 	// 储存QChatGPT主程序使用量记录
 	StoreQChatGPTUsage(usage *QChatGPTUsage) error
+
+	GetTodayUsageStatic() (TodayUsageStatic, error)
 }

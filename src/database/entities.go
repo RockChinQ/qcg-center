@@ -1,6 +1,8 @@
 // 数据库层面数据结构
 package database
 
+import "time"
+
 // 安装器报告数据
 type InstallerReport struct {
 	OSName     string `bson:"osname"`
@@ -20,4 +22,12 @@ type QChatGPTUsage struct {
 	MsgSource   string `bson:"msg_source"`
 	Timestamp   int64  `bson:"timestamp"`
 	RemoteAddr  string `bson:"remote_addr"`
+}
+
+type TodayUsageStatic struct {
+	Begin           time.Time `bson:"begin" json:"begin"`
+	Duration        int64     `bson:"duration" json:"duration"`
+	UsageCount      int       `bson:"usage_count" json:"usage_count"`
+	ActiveHostCount int       `bson:"active_host_count" json:"active_host_count"`
+	NewHostCount    int       `bson:"new_host_count" json:"new_host_count"`
 }
