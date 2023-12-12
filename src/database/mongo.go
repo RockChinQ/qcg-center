@@ -91,8 +91,8 @@ func (m *MongoDBManager) StoreQChatGPTUsage(usage *QChatGPTUsage) error {
 	return err
 }
 
-func (m *MongoDBManager) GetTodayUsageStatic() (TodayUsageStatic, error) {
-	var todayUsageStatic TodayUsageStatic
+func (m *MongoDBManager) GetTodayUsageStatic() (DailyUsageStatic, error) {
+	var todayUsageStatic DailyUsageStatic
 
 	coll := m.Client.Database("qcg-center-records").Collection("analysis_daily")
 
@@ -117,4 +117,44 @@ func (m *MongoDBManager) GetTodayUsageStatic() (TodayUsageStatic, error) {
 	}
 
 	return todayUsageStatic, nil
+}
+
+func (m *MongoDBManager) GetRecentDaysUsageTrend(day int) ([]DailyUsageStatic, error) {
+	var trend []DailyUsageStatic
+
+	coll := m.Client.Database("qcg-center-records").Collection("analysis_daily")
+
+	// 统一 UTC
+	today := time.Now().UTC()
+
+	// 今天的0点
+	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, time.UTC)
+
+	seq := 0
+
+	// 从今天开始往前推day天
+	for i := 0; i < day; i++ {
+		res := coll.FindOne(context.TODO(), map[string]interface{}{
+			"begin": today.Add(-24 * time.Hour * time.Duration(i)),
+		})
+
+		if res.Err() != nil {
+			return trend, res.Err()
+		}
+
+		var analysis DailyUsageStatic
+
+		err := res.Decode(&analysis)
+
+		if err != nil {
+			return trend, err
+		}
+
+		analysis.Number = seq
+		seq++
+
+		trend = append(trend, analysis)
+	}
+
+	return trend, nil
 }

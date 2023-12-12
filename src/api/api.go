@@ -130,12 +130,16 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 
 	grafanaRoot := GrafanaRoot(m)
 	grafanaTodayUsageStatic := GrafanaTodayUsageStatic(m)
+	grafanaRecentDaysUsageTrend := GrafanaRecentDaysUsageTrend(m)
 
 	r.GET("/grafana", grafanaRoot)
 	r.POST("/grafana", grafanaRoot)
 
 	r.GET("/grafana/today_usage_static", grafanaTodayUsageStatic)
 	r.POST("/grafana/today_usage_static", grafanaTodayUsageStatic)
+
+	r.GET("/grafana/recent_days_usage_trend", grafanaRecentDaysUsageTrend)
+	r.POST("/grafana/recent_days_usage_trend", grafanaRecentDaysUsageTrend)
 
 	m.r = r
 

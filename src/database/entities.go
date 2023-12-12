@@ -24,7 +24,8 @@ type QChatGPTUsage struct {
 	RemoteAddr  string `bson:"remote_addr"`
 }
 
-type TodayUsageStatic struct {
+type DailyUsageStatic struct {
+	Number          int       `bson:"number" json:"number"`
 	Begin           time.Time `bson:"begin" json:"begin"`
 	Duration        int64     `bson:"duration" json:"duration"`
 	UsageCount      int       `bson:"usage_count" json:"usage_count"`
