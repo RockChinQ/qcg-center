@@ -30,4 +30,5 @@ type TodayUsageStatic struct {
 	UsageCount      int       `bson:"usage_count" json:"usage_count"`
 	ActiveHostCount int       `bson:"active_host_count" json:"active_host_count"`
 	NewHostCount    int       `bson:"new_host_count" json:"new_host_count"`
+	ModifiedAt      time.Time `bson:"modified_at" json:"modified_at"`
 }

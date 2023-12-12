@@ -14,6 +14,7 @@ type DailyAnalysis struct {
 	UsageCount      int       `bson:"usage_count"`
 	ActiveHostCount int       `bson:"active_host_count"`
 	NewHostCount    int       `bson:"new_host_count"`
+	ModifiedAt      time.Time `bson:"modified_at"`
 }
 
 // 计算给定时间段的以下数据：
@@ -75,6 +76,8 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 	}
 
 	result.NewHostCount = int(newcount)
+
+	result.ModifiedAt = time.Now()
 
 	// 输出格式化后的结果
 	// 包含：开始时间、时长、使用量记录数、活跃主机数、新增主机数
