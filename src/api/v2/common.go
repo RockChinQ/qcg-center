@@ -36,9 +36,9 @@ func handleRequest[T any](c *gin.Context, db *database.IDatabaseManager, createR
 
 	if remoteAddr == "" {
 		// 从remoteAddr取
-		remoteAddr := c.Request.RemoteAddr
+		addr := c.Request.RemoteAddr
 		// 分割IP和端口
-		remoteAddrSlice := strings.Split(remoteAddr, ":")
+		remoteAddrSlice := strings.Split(addr, ":")
 		// 只取IP
 		remoteAddr = remoteAddrSlice[0]
 	}

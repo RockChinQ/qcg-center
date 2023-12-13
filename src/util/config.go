@@ -33,7 +33,8 @@ func EnsureConfigFile() (bool, bool, error) {
 			Database: DatabaseConfig{
 				Name: "mongodb",
 				Params: map[string]string{
-					"uri": "mongodb://localhost:27017",
+					"uri":      "mongodb://localhost:27017",
+					"database": "qcg-center-data",
 				},
 			},
 			API: APIConfig{

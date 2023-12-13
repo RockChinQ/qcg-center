@@ -3,10 +3,10 @@ package entities
 type MainUpdate struct {
 	Basic      BasicInfo `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	UpdateInfo struct {
-		SpentSeconds int `form:"spent_seconds" json:"spent_seconds" bson:"spent_seconds" binding:"required"`
-		InferReason  int `form:"infer_reason" json:"infer_reason" bson:"infer_reason" binding:"required"`
-		OldVersion   int `form:"old_version" json:"old_version" bson:"old_version" binding:"required"`
-		NewVersion   int `form:"new_version" json:"new_version" bson:"new_version" binding:"required"`
+		SpentSeconds int    `form:"spent_seconds" json:"spent_seconds" bson:"spent_seconds" binding:"required"`
+		InferReason  string `form:"infer_reason" json:"infer_reason" bson:"infer_reason" binding:"required"`
+		OldVersion   string `form:"old_version" json:"old_version" bson:"old_version" binding:"required"`
+		NewVersion   string `form:"new_version" json:"new_version" bson:"new_version" binding:"required"`
 	} `form:"update_info" json:"update_info" bson:"update_info" binding:"required"`
 }
 
@@ -64,7 +64,7 @@ type PluginUpdate struct {
 	Basic      BasicInfo  `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	Plugin     PluginInfo `form:"plugin" json:"plugin" bson:"plugin" binding:"required"`
 	UpdateInfo struct {
-		OldVersion int `form:"old_version" json:"old_version" bson:"old_version" binding:"required"`
-		NewVersion int `form:"new_version" json:"new_version" bson:"new_version" binding:"required"`
+		OldVersion string `form:"old_version" json:"old_version" bson:"old_version" binding:"required"`
+		NewVersion string `form:"new_version" json:"new_version" bson:"new_version" binding:"required"`
 	} `form:"update_info" json:"update_info" bson:"update_info" binding:"required"`
 }

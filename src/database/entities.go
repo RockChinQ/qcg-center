@@ -39,3 +39,25 @@ type CommonDocumnet struct {
 	Time       time.Time   `bson:"time" json:"time"`
 	Data       interface{} `bson:"data" json:"data"`
 }
+
+type HostIDRecord struct {
+	HostID string    `bson:"host_id" json:"host_id"`
+	Time   time.Time `bson:"time" json:"time"`
+}
+
+type InstanceIDRecord struct {
+	InstanceID string    `bson:"instance_id" json:"instance_id"`
+	Time       time.Time `bson:"time" json:"time"`
+}
+
+type IPRecord struct {
+	IP   string    `bson:"ip" json:"ip"`
+	Time time.Time `bson:"time" json:"time"`
+}
+
+type HostInstanceIPTuple struct {
+	HostID     string    `bson:"host_id" json:"host_id"`
+	InstanceID string    `bson:"instance_id" json:"instance_id"`
+	IP         string    `bson:"ip" json:"ip"`
+	Time       time.Time `bson:"time" json:"time"`
+}
