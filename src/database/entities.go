@@ -33,3 +33,9 @@ type DailyUsageStatic struct {
 	NewHostCount    int       `bson:"new_host_count" json:"new_host_count"`
 	ModifiedAt      time.Time `bson:"modified_at" json:"modified_at"`
 }
+
+type CommonDocumnet struct {
+	RemoteAddr string      `bson:"remote_addr" json:"remote_addr"`
+	Time       time.Time   `bson:"time" json:"time"`
+	Data       interface{} `bson:"data" json:"data"`
+}

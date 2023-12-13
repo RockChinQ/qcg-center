@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"qcg-center/src/entities"
 	"qcg-center/src/util"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -157,4 +158,43 @@ func (m *MongoDBManager) GetRecentDaysUsageTrend(day int) ([]DailyUsageStatic, e
 	}
 
 	return trend, nil
+}
+
+// v2
+func (m *MongoDBManager) InsertMainUpdateRecord(remote_addr string, record *entities.MainUpdate) error {
+	return nil
+}
+
+func (m *MongoDBManager) InsertMainAnnouncementRecord(remote_addr string, record *entities.MainAnnouncement) error {
+	return nil
+}
+
+func (m *MongoDBManager) InsertUsageQueryRecord(remote_addr string, record *entities.UsageQuery) error {
+
+	return nil
+}
+
+func (m *MongoDBManager) InsertUsageEventRecord(remote_addr string, record *entities.UsageEvent) error {
+
+	return nil
+}
+
+func (m *MongoDBManager) InsertUsageFunctionRecord(remote_addr string, record *entities.UsageFunction) error {
+
+	return nil
+}
+
+func (m *MongoDBManager) InsertPluginInstallRecord(remote_addr string, record *entities.PluginInstall) error {
+
+	return nil
+}
+
+func (m *MongoDBManager) InsertPluginRemoveRecord(remote_addr string, record *entities.PluginRemove) error {
+
+	return nil
+}
+
+func (m *MongoDBManager) InsertPluginUpdateRecord(remote_addr string, record *entities.PluginUpdate) error {
+
+	return nil
 }

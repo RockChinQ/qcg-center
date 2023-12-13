@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	v2 "qcg-center/src/api/v2"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -127,6 +129,28 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		// 返回纯文字ok，不是json
 		c.Writer.WriteString("ok")
 	})
+
+	mainUpdate := v2.MainUpdate(&m.dbmgr)
+	mainAnnouncement := v2.MainAnnouncement(&m.dbmgr)
+
+	usageQuery := v2.UsageQuery(&m.dbmgr)
+	usageEvent := v2.UsageEvent(&m.dbmgr)
+	usageFunction := v2.UsageFunction(&m.dbmgr)
+
+	pluginInstall := v2.PluginInstall(&m.dbmgr)
+	pluginRemove := v2.PluginRemove(&m.dbmgr)
+	pluginUpdate := v2.PluginUpdate(&m.dbmgr)
+
+	r.POST("/api/v2/main/update", mainUpdate)
+	r.POST("/api/v2/main/announcement", mainAnnouncement)
+
+	r.POST("/api/v2/usage/query", usageQuery)
+	r.POST("/api/v2/usage/event", usageEvent)
+	r.POST("/api/v2/usage/function", usageFunction)
+
+	r.POST("/api/v2/plugin/install", pluginInstall)
+	r.POST("/api/v2/plugin/remove", pluginRemove)
+	r.POST("/api/v2/plugin/update", pluginUpdate)
 
 	grafanaRoot := GrafanaRoot(m)
 	grafanaTodayUsageStatic := GrafanaTodayUsageStatic(m)
