@@ -198,6 +198,10 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 			"host_id":    host_id,
 			"created_at": time.Now().UTC(),
 		})
+
+		if err != nil {
+			return err
+		}
 	}
 
 	check, err = m.Client.Database(m.Database).Collection(ANALYSIS_INSTANCE_ID_COLLECTION_NAME).Find(context.TODO(), map[string]interface{}{
@@ -214,6 +218,10 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 			"instance_id": instance_id,
 			"created_at":  time.Now().UTC(),
 		})
+
+		if err != nil {
+			return err
+		}
 	}
 
 	check, err = m.Client.Database(m.Database).Collection(ANALYSIS_IP_COLLECTION_NAME).Find(context.TODO(), map[string]interface{}{
@@ -230,6 +238,10 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 			"ip":         ip,
 			"created_at": time.Now().UTC(),
 		})
+
+		if err != nil {
+			return err
+		}
 	}
 
 	check, err = m.Client.Database(m.Database).Collection(ANALYSIS_HOST_INSTANCE_IP_COLLECTION_NAME).Find(context.TODO(), map[string]interface{}{
@@ -255,7 +267,8 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 	return err
 }
 
-func (m *MongoDBManager) handleV2DirectData(remote_addr string, record interface{}, coll string) error {
+func (m *MongoDBManager) handleV2DirectData(remote_addr string, basic entities.BasicInfo, record interface{}, coll string) error {
+	m.saveHostInstanceIPTuple(basic.HostID, basic.InstanceID, remote_addr)
 	// 保存到对应的collection中
 	_, err := m.Client.Database(m.Database).Collection(coll).InsertOne(context.TODO(), map[string]interface{}{
 		"remote_addr": remote_addr,
@@ -268,33 +281,33 @@ func (m *MongoDBManager) handleV2DirectData(remote_addr string, record interface
 
 // v2
 func (m *MongoDBManager) InsertMainUpdateRecord(remote_addr string, record *entities.MainUpdate) error {
-	return m.handleV2DirectData(remote_addr, record, DIRECT_MAIN_UPDATE_RECORD_COLLECTION_NAME)
+	return m.handleV2DirectData(remote_addr, record.Basic, record, DIRECT_MAIN_UPDATE_RECORD_COLLECTION_NAME)
 }
 
 func (m *MongoDBManager) InsertMainAnnouncementRecord(remote_addr string, record *entities.MainAnnouncement) error {
-	return m.handleV2DirectData(remote_addr, record, DIRECT_MAIN_ANNOUNCEMENT_COLLECTION_NAME)
+	return m.handleV2DirectData(remote_addr, record.Basic, record, DIRECT_MAIN_ANNOUNCEMENT_COLLECTION_NAME)
 }
 
 func (m *MongoDBManager) InsertUsageQueryRecord(remote_addr string, record *entities.UsageQuery) error {
-	return m.handleV2DirectData(remote_addr, record, DIRECT_USAGE_QUERY_COLLECTION_NAME)
+	return m.handleV2DirectData(remote_addr, record.Basic, record, DIRECT_USAGE_QUERY_COLLECTION_NAME)
 }
 
 func (m *MongoDBManager) InsertUsageEventRecord(remote_addr string, record *entities.UsageEvent) error {
-	return m.handleV2DirectData(remote_addr, record, DIRECT_USAGE_EVENT_COLLECTION_NAME)
+	return m.handleV2DirectData(remote_addr, record.Basic, record, DIRECT_USAGE_EVENT_COLLECTION_NAME)
 }
 
 func (m *MongoDBManager) InsertUsageFunctionRecord(remote_addr string, record *entities.UsageFunction) error {
-	return m.handleV2DirectData(remote_addr, record, DIRECT_USAGE_FUNCTION_COLLECTION_NAME)
+	return m.handleV2DirectData(remote_addr, record.Basic, record, DIRECT_USAGE_FUNCTION_COLLECTION_NAME)
 }
 
 func (m *MongoDBManager) InsertPluginInstallRecord(remote_addr string, record *entities.PluginInstall) error {
-	return m.handleV2DirectData(remote_addr, record, DIRECT_PLUGIN_INSTALL_COLLECTION_NAME)
+	return m.handleV2DirectData(remote_addr, record.Basic, record, DIRECT_PLUGIN_INSTALL_COLLECTION_NAME)
 }
 
 func (m *MongoDBManager) InsertPluginRemoveRecord(remote_addr string, record *entities.PluginRemove) error {
-	return m.handleV2DirectData(remote_addr, record, DIRECT_PLUGIN_REMOVE_COLLECTION_NAME)
+	return m.handleV2DirectData(remote_addr, record.Basic, record, DIRECT_PLUGIN_REMOVE_COLLECTION_NAME)
 }
 
 func (m *MongoDBManager) InsertPluginUpdateRecord(remote_addr string, record *entities.PluginUpdate) error {
-	return m.handleV2DirectData(remote_addr, record, DIRECT_PLUGIN_UPDATE_COLLECTION_NAME)
+	return m.handleV2DirectData(remote_addr, record.Basic, record, DIRECT_PLUGIN_UPDATE_COLLECTION_NAME)
 }
