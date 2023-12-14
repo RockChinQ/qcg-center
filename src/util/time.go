@@ -3,11 +3,15 @@ package util
 import "time"
 
 func GetCSTTime() time.Time {
-	utcTime := time.Now().In(time.UTC)
+	// utcTime := time.Now().In(time.UTC)
 
-	cstTime := time.Date(utcTime.Year(), utcTime.Month(), utcTime.Day(), utcTime.Hour(), utcTime.Minute(), utcTime.Second(), utcTime.Nanosecond(), GetCSTTimeLocation())
+	// cstTime := time.Date(utcTime.Year(), utcTime.Month(), utcTime.Day(), utcTime.Hour(), utcTime.Minute(), utcTime.Second(), utcTime.Nanosecond(), GetCSTTimeLocation())
 
-	PrintTime(utcTime)
+	// PrintTime(utcTime)
+	// PrintTime(cstTime)
+
+	cstTime := time.Now().In(GetCSTTimeLocation())
+
 	PrintTime(cstTime)
 
 	return cstTime
