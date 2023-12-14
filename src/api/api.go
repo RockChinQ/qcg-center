@@ -6,7 +6,6 @@ import (
 	util "qcg-center/src/util"
 	"strconv"
 	"strings"
-	"time"
 
 	v2 "qcg-center/src/api/v2"
 
@@ -53,8 +52,7 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		installerReport.OSName = report.OSName
 		installerReport.Arch = report.Arch
 
-		local := time.FixedZone("CST", 8*3600)
-		installerReport.Timestamp = time.Now().In(local).Unix()
+		installerReport.Timestamp = util.GetCSTTime().Unix()
 		installerReport.Version = report.Version
 		installerReport.Message = report.Message
 
@@ -101,8 +99,7 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		qchatgptUsage.Count = usage.Count
 		qchatgptUsage.MsgSource = usage.MsgSource
 
-		local := time.FixedZone("CST", 8*3600)
-		qchatgptUsage.Timestamp = time.Now().In(local).Unix()
+		qchatgptUsage.Timestamp = util.GetCSTTime().Unix()
 
 		// 从header取到x-forwarded-for
 		qchatgptUsage.RemoteAddr = c.Request.Header.Get("x-forwarded-for")

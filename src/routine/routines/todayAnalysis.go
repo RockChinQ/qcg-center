@@ -24,8 +24,11 @@ func (r *TodayAnalyzeRoutine) Init(cfg *util.Config, db *database.MongoDBManager
 }
 
 func (r *TodayAnalyzeRoutine) Run() error {
-	// 获取今天零时时间戳
-	today := time.Now().Truncate(24 * time.Hour)
+	// 统一 UTC
+	today := time.Now().UTC()
+
+	// 今天的0点
+	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, util.GetCSTTimeLocation())
 
 	analysis, err := Calc(today, 24*time.Hour, r.DBMgr)
 
