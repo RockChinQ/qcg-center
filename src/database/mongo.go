@@ -156,12 +156,23 @@ func (m *MongoDBManager) GetRecentDaysUsageTrend(day int) ([]DailyUsageStatic, e
 
 	// 从今天开始往前推day天
 	for i := 0; i < day; i++ {
+		begin := today.Add(-24 * time.Hour * time.Duration(i))
 		res := coll.FindOne(context.TODO(), map[string]interface{}{
-			"begin": today.Add(-24 * time.Hour * time.Duration(i)),
+			"begin": begin,
 		})
 
 		if res.Err() != nil {
-			return trend, res.Err()
+			trend = append(trend, DailyUsageStatic{
+				Number:          seq,
+				Begin:           begin,
+				Duration:        24 * 60 * 60,
+				UsageCount:      0,
+				ActiveHostCount: 0,
+				NewHostCount:    0,
+			},
+			)
+			seq++
+			continue
 		}
 
 		var analysis DailyUsageStatic
