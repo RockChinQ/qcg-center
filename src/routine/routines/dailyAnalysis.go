@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"qcg-center/src/database"
+	"qcg-center/src/util"
 )
 
 type DailyAnalysis struct {
@@ -31,8 +32,8 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 	// 计算使用量记录数
 	recnum, err := dbmgr.Client.Database("qcg-center-records").Collection("qchatgpt-usage").CountDocuments(context.TODO(), map[string]interface{}{
 		"timestamp": map[string]interface{}{
-			"$gte": int64(begin.Add(-8 * time.Hour).Unix()),
-			"$lt":  int64(begin.Add(-8 * time.Hour).Add(duration).Unix()),
+			"$gte": begin.Unix(),
+			"$lt":  begin.Add(duration).Unix(),
 		},
 	})
 
@@ -48,8 +49,8 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 	// 以remote_addr字段去重
 	acthost, err := dbmgr.Client.Database("qcg-center-records").Collection("qchatgpt-usage").Distinct(context.TODO(), "remote_addr", map[string]interface{}{
 		"timestamp": map[string]interface{}{
-			"$gte": int64(begin.Add(-8 * time.Hour).Unix()),
-			"$lt":  int64(begin.Add(-8 * time.Hour).Add(duration).Unix()),
+			"$gte": begin.Unix(),
+			"$lt":  begin.Add(duration).Unix(),
 		},
 	})
 
@@ -66,8 +67,8 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 
 	newcount, err := dbmgr.Client.Database("qcg-center-records").Collection("analysis_usage_remote_addrs").CountDocuments(context.TODO(), map[string]interface{}{
 		"created_at": map[string]interface{}{
-			"$gte": begin.Add(-8 * time.Hour),
-			"$lt":  begin.Add(-8 * time.Hour).Add(duration),
+			"$gte": begin,
+			"$lt":  begin.Add(duration),
 		},
 	})
 
@@ -77,7 +78,7 @@ func Calc(begin time.Time, duration time.Duration, dbmgr *database.MongoDBManage
 
 	result.NewHostCount = int(newcount)
 
-	result.ModifiedAt = time.Now()
+	result.ModifiedAt = util.GetCSTTime()
 
 	// 输出格式化后的结果
 	// 包含：开始时间、时长、使用量记录数、活跃主机数、新增主机数
