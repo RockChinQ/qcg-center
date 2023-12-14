@@ -7,6 +7,7 @@ func GetCSTTime() time.Time {
 
 	cstTime := time.Date(utcTime.Year(), utcTime.Month(), utcTime.Day(), utcTime.Hour(), utcTime.Minute(), utcTime.Second(), utcTime.Nanosecond(), GetCSTTimeLocation())
 
+	PrintTime(utcTime)
 	PrintTime(cstTime)
 
 	return cstTime
