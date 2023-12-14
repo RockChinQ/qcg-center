@@ -76,7 +76,7 @@ func (m *MongoDBManager) StoreInstallerReport(report *InstallerReport) error {
 		_, err = m.Client.Database("qcg-center-records").Collection("analysis_reports_remote_addrs").InsertOne(context.TODO(), map[string]interface{}{
 			"remote_addr": report.RemoteAddr,
 			// 使用report.Timestamp
-			"created_at": time.Unix(report.Timestamp, 0),
+			"created_at": util.GetCSTTime(),
 		})
 	}
 
@@ -106,7 +106,7 @@ func (m *MongoDBManager) StoreQChatGPTUsage(usage *QChatGPTUsage) error {
 		// 无记录
 		_, err = m.Client.Database("qcg-center-records").Collection("analysis_usage_remote_addrs").InsertOne(context.TODO(), map[string]interface{}{
 			"remote_addr": usage.RemoteAddr,
-			"created_at":  time.Unix(usage.Timestamp, 0),
+			"created_at":  util.GetCSTTime(),
 		})
 	}
 
@@ -122,7 +122,7 @@ func (m *MongoDBManager) GetTodayUsageStatic() (DailyUsageStatic, error) {
 	today := time.Now().UTC()
 
 	// 今天的0点
-	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, time.UTC)
+	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, util.GetCSTTimeLocation())
 
 	res := coll.FindOne(context.TODO(), map[string]interface{}{
 		"begin": today,
@@ -150,7 +150,7 @@ func (m *MongoDBManager) GetRecentDaysUsageTrend(day int) ([]DailyUsageStatic, e
 	today := time.Now().UTC()
 
 	// 今天的0点
-	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, time.UTC)
+	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, util.GetCSTTimeLocation())
 
 	seq := 0
 
@@ -196,7 +196,7 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 		// 无记录
 		_, err = m.Client.Database(m.Database).Collection(ANALYSIS_HOST_ID_COLLECTION_NAME).InsertOne(context.TODO(), map[string]interface{}{
 			"host_id":    host_id,
-			"created_at": time.Now().UTC(),
+			"created_at": util.GetCSTTime(),
 		})
 
 		if err != nil {
@@ -216,7 +216,7 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 		// 无记录
 		_, err = m.Client.Database(m.Database).Collection(ANALYSIS_INSTANCE_ID_COLLECTION_NAME).InsertOne(context.TODO(), map[string]interface{}{
 			"instance_id": instance_id,
-			"created_at":  time.Now().UTC(),
+			"created_at":  util.GetCSTTime(),
 		})
 
 		if err != nil {
@@ -236,7 +236,7 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 		// 无记录
 		_, err = m.Client.Database(m.Database).Collection(ANALYSIS_IP_COLLECTION_NAME).InsertOne(context.TODO(), map[string]interface{}{
 			"ip":         ip,
-			"created_at": time.Now().UTC(),
+			"created_at": util.GetCSTTime(),
 		})
 
 		if err != nil {
@@ -260,7 +260,7 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 			"host_id":     host_id,
 			"instance_id": instance_id,
 			"ip":          ip,
-			"created_at":  time.Now().UTC(),
+			"created_at":  util.GetCSTTime(),
 		})
 	}
 
@@ -272,7 +272,7 @@ func (m *MongoDBManager) handleV2DirectData(remote_addr string, basic entities.B
 	// 保存到对应的collection中
 	_, err := m.Client.Database(m.Database).Collection(coll).InsertOne(context.TODO(), map[string]interface{}{
 		"remote_addr": remote_addr,
-		"time":        time.Now().UTC(),
+		"time":        util.GetCSTTime(),
 		"data":        record,
 	})
 
