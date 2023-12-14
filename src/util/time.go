@@ -3,7 +3,7 @@ package util
 import "time"
 
 func GetCSTTime() time.Time {
-	utcTime := time.Now().UTC()
+	utcTime := time.Now().In(time.UTC)
 
 	cstTime := time.Date(utcTime.Year(), utcTime.Month(), utcTime.Day(), utcTime.Hour(), utcTime.Minute(), utcTime.Second(), utcTime.Nanosecond(), GetCSTTimeLocation())
 
