@@ -7,6 +7,8 @@ func GetCSTTime() time.Time {
 
 	cstTime := time.Date(utcTime.Year(), utcTime.Month(), utcTime.Day(), utcTime.Hour(), utcTime.Minute(), utcTime.Second(), utcTime.Nanosecond(), GetCSTTimeLocation())
 
+	PrintTime(cstTime)
+
 	return cstTime
 }
 
@@ -15,7 +17,7 @@ func GetCSTTimeLocation() *time.Location {
 }
 
 func PrintTime(t time.Time) {
-	println(t.Format("2006-01-02 15:04:05"))
+	print(t.Format("2006-01-02 15:04:05 "))
 	// 打印时区
 	println(t.Location().String())
 }
