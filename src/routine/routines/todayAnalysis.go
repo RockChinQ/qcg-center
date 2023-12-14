@@ -19,7 +19,7 @@ func (r *TodayAnalyzeRoutine) Init(cfg *util.Config, db *database.MongoDBManager
 	r.Cfg = cfg
 	r.DBMgr = db
 
-	return "@every 5m", nil
+	return "@every 1m", nil
 	// return "45 19 * * *", nil
 }
 
