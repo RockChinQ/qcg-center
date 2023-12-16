@@ -119,7 +119,7 @@ func (m *MongoDBManager) GetTodayUsageStatic() (DailyUsageStatic, error) {
 	coll := m.Client.Database("qcg-center-records").Collection("analysis_daily")
 
 	// 统一 UTC
-	today := time.Now().UTC()
+	today := util.GetCSTTime()
 
 	// 今天的0点
 	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, util.GetCSTTimeLocation())
@@ -147,7 +147,7 @@ func (m *MongoDBManager) GetRecentDaysUsageTrend(day int) ([]DailyUsageStatic, e
 	coll := m.Client.Database("qcg-center-records").Collection("analysis_daily")
 
 	// 统一 UTC
-	today := time.Now().UTC()
+	today := util.GetCSTTime()
 
 	// 今天的0点
 	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, util.GetCSTTimeLocation())

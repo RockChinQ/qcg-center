@@ -19,13 +19,13 @@ func (r *TodayAnalyzeRoutine) Init(cfg *util.Config, db *database.MongoDBManager
 	r.Cfg = cfg
 	r.DBMgr = db
 
-	return "@every 5m", nil
+	return "@every 1m", nil
 	// return "45 19 * * *", nil
 }
 
 func (r *TodayAnalyzeRoutine) Run() error {
 	// 统一 UTC
-	today := time.Now().UTC()
+	today := util.GetCSTTime()
 
 	// 今天的0点
 	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, util.GetCSTTimeLocation())
