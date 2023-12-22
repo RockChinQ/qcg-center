@@ -51,8 +51,18 @@ type InstanceIDRecord struct {
 }
 
 type IPRecord struct {
-	IP   string    `bson:"ip" json:"ip"`
-	Time time.Time `bson:"time" json:"time"`
+	IP          string    `bson:"ip" json:"ip"`
+	Country     string    `bson:"country" json:"country"`
+	CountryCode string    `bson:"country_code" json:"country_code"`
+	Region      string    `bson:"region" json:"region"`
+	RegionName  string    `bson:"region_name" json:"region_name"`
+	City        string    `bson:"city" json:"city"`
+	Lat         float64   `bson:"lat" json:"lat"`
+	Lon         float64   `bson:"lon" json:"lon"`
+	Timezone    string    `bson:"timezone" json:"timezone"`
+	ISP         string    `bson:"isp" json:"isp"`
+	Org         string    `bson:"org" json:"org"`
+	Time        time.Time `bson:"time" json:"time"`
 }
 
 type HostInstanceIPTuple struct {

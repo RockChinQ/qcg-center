@@ -192,6 +192,50 @@ func (m *MongoDBManager) GetRecentDaysUsageTrend(day int) ([]DailyUsageStatic, e
 	return trend, nil
 }
 
+func (m *MongoDBManager) saveIPInfo(ip string) error {
+	// 检查是否有相同的记录
+	// 无则插入(ip, 当前时间)
+	check, err := m.Client.Database(m.Database).Collection(ANALYSIS_IP_COLLECTION_NAME).Find(context.TODO(), map[string]interface{}{
+		"ip": ip,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	if !check.Next(context.Background()) {
+
+		geo_info, err := util.GetIPRecord(ip)
+
+		if err != nil {
+			return err
+		}
+
+		data := map[string]interface{}{
+			"ip":           ip,
+			"created_at":   util.GetCSTTime(),
+			"country":      geo_info["country"],
+			"country_code": geo_info["countryCode"],
+			"region":       geo_info["region"],
+			"region_name":  geo_info["regionName"],
+			"city":         geo_info["city"],
+			"lat":          geo_info["lat"],
+			"lon":          geo_info["lon"],
+			"timezone":     geo_info["timezone"],
+			"isp":          geo_info["isp"],
+			"org":          geo_info["org"],
+		}
+		// 无记录
+		_, err = m.Client.Database(m.Database).Collection(ANALYSIS_IP_COLLECTION_NAME).InsertOne(context.TODO(), data)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
 func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id string, ip string) error {
 	// 检查每个表中是否有相同的记录
 	// 无则插入(host_id, 当前时间)
@@ -235,24 +279,10 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 		}
 	}
 
-	check, err = m.Client.Database(m.Database).Collection(ANALYSIS_IP_COLLECTION_NAME).Find(context.TODO(), map[string]interface{}{
-		"ip": ip,
-	})
+	err = m.saveIPInfo(ip)
 
 	if err != nil {
 		return err
-	}
-
-	if !check.Next(context.Background()) {
-		// 无记录
-		_, err = m.Client.Database(m.Database).Collection(ANALYSIS_IP_COLLECTION_NAME).InsertOne(context.TODO(), map[string]interface{}{
-			"ip":         ip,
-			"created_at": util.GetCSTTime(),
-		})
-
-		if err != nil {
-			return err
-		}
 	}
 
 	check, err = m.Client.Database(m.Database).Collection(ANALYSIS_HOST_INSTANCE_IP_COLLECTION_NAME).Find(context.TODO(), map[string]interface{}{
@@ -279,9 +309,14 @@ func (m *MongoDBManager) saveHostInstanceIPTuple(host_id string, instance_id str
 }
 
 func (m *MongoDBManager) handleV2DirectData(remote_addr string, basic entities.BasicInfo, record interface{}, coll string) error {
-	m.saveHostInstanceIPTuple(basic.HostID, basic.InstanceID, remote_addr)
+	err := m.saveHostInstanceIPTuple(basic.HostID, basic.InstanceID, remote_addr)
+
+	if err != nil {
+		println(err.Error())
+	}
+
 	// 保存到对应的collection中
-	_, err := m.Client.Database(m.Database).Collection(coll).InsertOne(context.TODO(), map[string]interface{}{
+	_, err = m.Client.Database(m.Database).Collection(coll).InsertOne(context.TODO(), map[string]interface{}{
 		"remote_addr": remote_addr,
 		"time":        util.GetCSTTime(),
 		"data":        record,
