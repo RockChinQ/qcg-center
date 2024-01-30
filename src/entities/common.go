@@ -17,7 +17,7 @@ type RuntimeInfo struct {
 
 type PluginInfo struct {
 	Name    string `form:"name" json:"name" bson:"name" binding:"required"`
-	Remote  string `form:"remote" json:"remote" bson:"remote" binding:"required"`
+	Remote  string `form:"remote" json:"remote" bson:"remote"`
 	Author  string `form:"author" json:"author" bson:"author" binding:"required"`
 	Version string `form:"version" json:"version" bson:"version" binding:"required"`
 }
