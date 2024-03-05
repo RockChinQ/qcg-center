@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	legacy "qcg-center/src/controller/api/legacy"
-	v2 "qcg-center/src/controller/api/v2"
+	record "qcg-center/src/controller/api/v2/record"
 
 	"github.com/gin-gonic/gin"
 )
@@ -128,16 +128,16 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 		c.Writer.WriteString("ok")
 	})
 
-	mainUpdate := v2.MainUpdate(&m.dbmgr)
-	mainAnnouncement := v2.MainAnnouncement(&m.dbmgr)
+	mainUpdate := record.MainUpdate(&m.dbmgr)
+	mainAnnouncement := record.MainAnnouncement(&m.dbmgr)
 
-	usageQuery := v2.UsageQuery(&m.dbmgr)
-	usageEvent := v2.UsageEvent(&m.dbmgr)
-	usageFunction := v2.UsageFunction(&m.dbmgr)
+	usageQuery := record.UsageQuery(&m.dbmgr)
+	usageEvent := record.UsageEvent(&m.dbmgr)
+	usageFunction := record.UsageFunction(&m.dbmgr)
 
-	pluginInstall := v2.PluginInstall(&m.dbmgr)
-	pluginRemove := v2.PluginRemove(&m.dbmgr)
-	pluginUpdate := v2.PluginUpdate(&m.dbmgr)
+	pluginInstall := record.PluginInstall(&m.dbmgr)
+	pluginRemove := record.PluginRemove(&m.dbmgr)
+	pluginUpdate := record.PluginUpdate(&m.dbmgr)
 
 	r.POST("/api/v2/main/update", mainUpdate)
 	r.POST("/api/v2/main/announcement", mainAnnouncement)
