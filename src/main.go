@@ -4,9 +4,8 @@ import (
 	"log"
 	"os"
 	"qcg-center/src/controller/api"
-	"qcg-center/src/controller/routine"
-	"qcg-center/src/controller/routine/routines"
-	"qcg-center/src/database"
+	"qcg-center/src/dao"
+	serviceRecord "qcg-center/src/service/record"
 	"qcg-center/src/util"
 )
 
@@ -34,32 +33,22 @@ func main() {
 	}
 
 	// 初始化数据库管理器
-
-	dbmgr := &database.MongoDBManager{
-		Cfg: cfg,
-	}
-
-	err = dbmgr.Connect()
+	dbmgr, err := dao.NewMongoDBManager(cfg.Database.Params["uri"], cfg.Database.Params["database"])
 
 	if err != nil {
 		log.Println("Failed to connect to database")
 		panic(err)
 	}
 
-	apimgr := &api.WebAPI{
-		Cfg: cfg,
-	}
+	// 初始化服务
+	svRecord := serviceRecord.NewRecordService(dbmgr)
 
-	err = apimgr.Init(dbmgr)
-
-	if err != nil {
-		log.Println("Failed to initialize API manager")
-		panic(err)
-	}
+	// 初始化API管理器
+	apimgr := api.NewWebAPI(svRecord, cfg.API.Port, cfg.API.Listen)
 
 	// 初始化routines
-	InitializeRoutines(cfg, dbmgr)
-	log.Printf("Routines scheduled.")
+	// InitializeRoutines(cfg, dbmgr)
+	// log.Printf("Routines scheduled.")
 
 	err = apimgr.Serve()
 
@@ -69,11 +58,11 @@ func main() {
 	}
 }
 
-func InitializeRoutines(cfg *util.Config, db *database.MongoDBManager) {
-	// 注册routines
-	routine.Register("TodayAnalysis", &routines.TodayAnalyzeRoutine{})
-	routine.Register("YesterdayAnalysis", &routines.YesterdayAnalyzeRoutine{})
+// func InitializeRoutines(cfg *util.Config, db *database.MongoDBManager) {
+// 	// 注册routines
+// 	routine.Register("TodayAnalysis", &routines.TodayAnalyzeRoutine{})
+// 	routine.Register("YesterdayAnalysis", &routines.YesterdayAnalyzeRoutine{})
 
-	// 启动routines
-	routine.ScheduleAll(cfg, db)
-}
+// 	// 启动routines
+// 	routine.ScheduleAll(cfg, db)
+// }

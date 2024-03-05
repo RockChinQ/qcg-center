@@ -8,19 +8,9 @@ import (
 )
 
 // 处理 IP 地理位置
-
 func GetIPRecord(ip string) (map[string]interface{}, error) {
-	url := "http://ip-api.com/json/" + ip + "?lang=zh-CN"
 
-	resp, err := http.Get(url)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
+	body, err := GetIPGeoJSONBytes(ip)
 
 	if err != nil {
 		return nil, err
@@ -40,4 +30,24 @@ func GetIPRecord(ip string) (map[string]interface{}, error) {
 	}
 
 	return data, nil
+}
+
+func GetIPGeoJSONBytes(ip string) ([]byte, error) {
+	url := "http://ip-api.com/json/" + ip + "?lang=zh-CN"
+
+	resp, err := http.Get(url)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
 }
