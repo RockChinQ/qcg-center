@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"os"
-	"qcg-center/src/api"
+	"qcg-center/src/controller"
 	"qcg-center/src/database"
 	"qcg-center/src/routine"
 	"qcg-center/src/routine/routines"
@@ -46,9 +46,7 @@ func main() {
 		panic(err)
 	}
 
-	var apimgr api.IAPIManager
-
-	apimgr = &api.WebAPI{
+	apimgr := &controller.WebAPI{
 		Cfg: cfg,
 	}
 

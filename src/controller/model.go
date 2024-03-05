@@ -1,4 +1,4 @@
-package api
+package controller
 
 import (
 	database "qcg-center/src/database"

@@ -1,12 +1,14 @@
-package api
+package legacy
 
 import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+
+	"qcg-center/src/database"
 )
 
-func GrafanaRoot(m *WebAPI) func(c *gin.Context) {
+func GrafanaRoot(m *database.IDatabaseManager) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"code": 0,
@@ -15,9 +17,9 @@ func GrafanaRoot(m *WebAPI) func(c *gin.Context) {
 	}
 }
 
-func GrafanaTodayUsageStatic(m *WebAPI) func(c *gin.Context) {
+func GrafanaTodayUsageStatic(m *database.IDatabaseManager) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		result, err := m.dbmgr.GetTodayUsageStatic()
+		result, err := (*m).GetTodayUsageStatic()
 
 		if err != nil {
 			c.JSON(500, gin.H{
@@ -35,7 +37,7 @@ func GrafanaTodayUsageStatic(m *WebAPI) func(c *gin.Context) {
 	}
 }
 
-func GrafanaRecentDaysUsageTrend(m *WebAPI) func(c *gin.Context) {
+func GrafanaRecentDaysUsageTrend(m *database.IDatabaseManager) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		dayParam := c.Query("day")
 		day, err := strconv.Atoi(dayParam)
@@ -48,7 +50,7 @@ func GrafanaRecentDaysUsageTrend(m *WebAPI) func(c *gin.Context) {
 			return
 		}
 
-		result, err := m.dbmgr.GetRecentDaysUsageTrend(day)
+		result, err := (*m).GetRecentDaysUsageTrend(day)
 
 		if err != nil {
 			c.JSON(500, gin.H{

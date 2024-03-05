@@ -1,4 +1,4 @@
-package api
+package legacy
 
 type LegacyReport struct {
 	OSName    string `form:"osname" json:"osname" binding:"required"`

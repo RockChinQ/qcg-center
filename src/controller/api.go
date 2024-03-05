@@ -1,4 +1,4 @@
-package api
+package controller
 
 import (
 	"log"
@@ -7,7 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	v2 "qcg-center/src/api/v2"
+	legacy "qcg-center/src/controller/legacy"
+	v2 "qcg-center/src/controller/v2"
 
 	"github.com/gin-gonic/gin"
 )
@@ -38,7 +39,7 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 	r := gin.Default()
 
 	r.GET("/legacy/report", func(c *gin.Context) {
-		var report LegacyReport
+		var report legacy.LegacyReport
 
 		if err := c.ShouldBind(&report); err != nil {
 			log.Println(err)
@@ -83,7 +84,7 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 	})
 
 	r.GET("/legacy/usage", func(c *gin.Context) {
-		var usage LegacyUsage
+		var usage legacy.LegacyUsage
 
 		if err := c.ShouldBind(&usage); err != nil {
 			log.Println(err)
@@ -149,9 +150,9 @@ func (m *WebAPI) Init(dbmgr database.IDatabaseManager) error {
 	r.POST("/api/v2/plugin/remove", pluginRemove)
 	r.POST("/api/v2/plugin/update", pluginUpdate)
 
-	grafanaRoot := GrafanaRoot(m)
-	grafanaTodayUsageStatic := GrafanaTodayUsageStatic(m)
-	grafanaRecentDaysUsageTrend := GrafanaRecentDaysUsageTrend(m)
+	grafanaRoot := legacy.GrafanaRoot(&m.dbmgr)
+	grafanaTodayUsageStatic := legacy.GrafanaTodayUsageStatic(&m.dbmgr)
+	grafanaRecentDaysUsageTrend := legacy.GrafanaRecentDaysUsageTrend(&m.dbmgr)
 
 	r.GET("/grafana", grafanaRoot)
 	r.POST("/grafana", grafanaRoot)
