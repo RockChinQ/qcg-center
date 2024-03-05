@@ -1,4 +1,4 @@
-package controller
+package api
 
 import (
 	"log"
@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	legacy "qcg-center/src/controller/legacy"
-	v2 "qcg-center/src/controller/v2"
+	legacy "qcg-center/src/controller/api/legacy"
+	v2 "qcg-center/src/controller/api/v2"
 
 	"github.com/gin-gonic/gin"
 )
