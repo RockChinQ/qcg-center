@@ -6,6 +6,7 @@ import (
 	"qcg-center/src/controller/api"
 	"qcg-center/src/dao"
 	serviceRecord "qcg-center/src/service/record"
+	serviceView "qcg-center/src/service/view"
 	"qcg-center/src/util"
 )
 
@@ -42,9 +43,10 @@ func main() {
 
 	// 初始化服务
 	svRecord := serviceRecord.NewRecordService(dbmgr)
+	svView := serviceView.NewRealTimeDataService(dbmgr)
 
 	// 初始化API管理器
-	apimgr := api.NewWebAPI(svRecord, cfg.API.Port, cfg.API.Listen)
+	apimgr := api.NewWebAPI(svRecord, svView, cfg.API.Port, cfg.API.Listen)
 
 	// 初始化routines
 	// InitializeRoutines(cfg, dbmgr)

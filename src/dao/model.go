@@ -2,6 +2,7 @@ package dao
 
 import (
 	"qcg-center/src/entities/dao"
+	"time"
 )
 
 type IDatabaseManager interface {
@@ -16,4 +17,7 @@ type IDatabaseManager interface {
 
 	// 插入记录数据
 	InsertRecord(record dao.CommonRecordDAO) error
+
+	// 统计一段时间内某字段的唯一值的数量
+	CountUniqueValueInDuration(coll_name string, field_name string, start_time time.Time, end_time time.Time, time_field_name string) (int, error)
 }

@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"errors"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -118,4 +119,28 @@ func (m *MongoDBManager) InsertRecord(record dao.CommonRecordDAO) error {
 	_, err := coll.InsertOne(context.TODO(), record)
 
 	return err
+}
+
+func (m *MongoDBManager) CountUniqueValueInDuration(coll_name string, field_name string, start_time time.Time, end_time time.Time, time_field_name string) (int, error) {
+	coll := m.Client.Database(m.Database).Collection(coll_name)
+
+	pipeline := bson.A{
+		bson.D{{Key: "$match", Value: bson.D{{Key: time_field_name, Value: bson.D{{Key: "$gte", Value: start_time}, {Key: "$lte", Value: end_time}}}}}},
+		bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: "$" + field_name}}}},
+		bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: nil}, {Key: "count", Value: bson.D{{Key: "$sum", Value: 1}}}}}},
+	}
+
+	cursor, err := coll.Aggregate(context.TODO(), pipeline)
+
+	if err != nil {
+		return 0, err
+	}
+
+	var result []bson.M
+
+	if err = cursor.All(context.Background(), &result); err != nil {
+		return 0, err
+	}
+
+	return len(result), nil
 }
