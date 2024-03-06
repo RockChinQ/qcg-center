@@ -142,5 +142,5 @@ func (m *MongoDBManager) CountUniqueValueInDuration(coll_name string, field_name
 		return 0, err
 	}
 
-	return len(result), nil
+	return int(result[0]["count"].(int32)), nil
 }
