@@ -26,12 +26,16 @@ func CommonUniqueValueCountingGeneric(
 		start_time_param := c.Query("start_time")
 		end_time_param := c.Query("end_time")
 
+		period := c.Query("period")
+		period_amount := c.Query("period_amount")
+		period_offset := c.Query("period_offset")
+
 		timezone := c.Query("timezone")
 
-		if minute_param == "" && (start_time_param == "" || end_time_param == "") {
-			c.JSON(400, gin.H{"error": "missing parameter"})
-			return
-		}
+		// if minute_param == "" && (start_time_param == "" || end_time_param == "") {
+		// 	c.JSON(400, gin.H{"error": "missing parameter"})
+		// 	return
+		// }
 
 		var start_time time.Time
 		var end_time time.Time
@@ -47,7 +51,7 @@ func CommonUniqueValueCountingGeneric(
 
 			start_time = now.Add(-1 * time.Duration(minute) * time.Minute)
 			end_time = now
-		} else {
+		} else if start_time_param != "" && end_time_param != "" {
 			var err error
 			layout := "2006-01-02 15:04:05"
 
@@ -78,6 +82,26 @@ func CommonUniqueValueCountingGeneric(
 				c.JSON(400, gin.H{"error": "start time should be before end time"})
 				return
 			}
+		} else if period != "" && period_amount != "" && period_offset != "" {
+			// 取整
+			period_amount_int, err := strconv.Atoi(period_amount)
+			if err != nil {
+				c.JSON(400, gin.H{"error": err.Error()})
+				return
+			}
+
+			period_offset_int, err := strconv.Atoi(period_offset)
+			if err != nil {
+				c.JSON(400, gin.H{"error": err.Error()})
+				return
+			}
+
+			// 获取开始时间的整period时间点
+			start_time, end_time = util.GetCSTFixedPeriodTime(period, period_amount_int, period_offset_int)
+
+		} else {
+			c.JSON(400, gin.H{"error": "missing parameter"})
+			return
 		}
 
 		count, err := sv.CountUniqueValueInDuration(coll_name, field_name, start_time, end_time, time_field_name)
