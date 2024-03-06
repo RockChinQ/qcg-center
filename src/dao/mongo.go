@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -147,4 +148,46 @@ func (m *MongoDBManager) CountUniqueValueInDuration(coll_name string, field_name
 	}
 
 	return int(result[0]["count"].(int32)), nil
+}
+
+// 聚合一段时间内某个字段的相同值的数量
+func (m *MongoDBManager) AggregationValueAmountInDuration(coll_name string, field_name string, start_time time.Time, end_time time.Time, time_field_name string) (dto.AggregationValueAmountDTO, error) {
+	coll := m.Client.Database(m.Database).Collection(coll_name)
+
+	pipeline := bson.A{
+		bson.D{{Key: "$match", Value: bson.D{{Key: time_field_name, Value: bson.D{{Key: "$gte", Value: start_time}, {Key: "$lte", Value: end_time}}}}}},
+		bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: "$" + field_name}, {Key: "count", Value: bson.D{{Key: "$sum", Value: 1}}}}}},
+	}
+
+	cursor, err := coll.Aggregate(context.TODO(), pipeline)
+
+	if err != nil {
+		return dto.AggregationValueAmountDTO{}, err
+	}
+
+	var result []bson.M
+
+	if err = cursor.All(context.Background(), &result); err != nil {
+		return dto.AggregationValueAmountDTO{}, err
+	}
+
+	fmt.Println(result)
+
+	var resultData []dto.ValueAmount
+
+	total := 0
+
+	for _, item := range result {
+		v := item["_id"].(string)
+		c := int(item["count"].(int32))
+		total += c
+		resultData = append(resultData, dto.ValueAmount{Value: v, Count: c})
+	}
+
+	resultDTO := dto.AggregationValueAmountDTO{
+		TotalAmount: total,
+		Data:        resultData,
+	}
+
+	return resultDTO, nil
 }

@@ -2,6 +2,7 @@ package dao
 
 import (
 	"qcg-center/src/entities/dao"
+	"qcg-center/src/entities/dto"
 	"time"
 )
 
@@ -20,4 +21,7 @@ type IDatabaseManager interface {
 
 	// 统计一段时间内某字段的唯一值的数量
 	CountUniqueValueInDuration(coll_name string, field_name string, start_time time.Time, end_time time.Time, time_field_name string) (int, error)
+
+	// 聚合一段时间内某个字段的相同值的数量
+	AggregationValueAmountInDuration(coll_name string, field_name string, start_time time.Time, end_time time.Time, time_field_name string) (dto.AggregationValueAmountDTO, error)
 }

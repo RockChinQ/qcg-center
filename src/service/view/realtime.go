@@ -3,6 +3,7 @@ package view
 
 import (
 	"qcg-center/src/dao"
+	"qcg-center/src/entities/dto"
 	"time"
 )
 
@@ -24,6 +25,16 @@ func (s *RealTimeDataService) CountUniqueValueInDuration(
 	end_time time.Time,
 	time_field_name string,
 ) (int, error) {
-	// TODO
 	return s.db.CountUniqueValueInDuration(coll_name, field_name, start_time, end_time, time_field_name)
+}
+
+// 聚合一段时间内某个字段的相同值的数量
+func (s *RealTimeDataService) AggregationValueAmountInDuration(
+	coll_name string,
+	field_name string,
+	start_time time.Time,
+	end_time time.Time,
+	time_field_name string,
+) (dto.AggregationValueAmountDTO, error) {
+	return s.db.AggregationValueAmountInDuration(coll_name, field_name, start_time, end_time, time_field_name)
 }
