@@ -35,6 +35,17 @@ func NewWebAPI(svRecord *serviceRecord.RecordService, svView *serviceView.RealTi
 
 	view.BindPath(r, svView)
 
+	view_root := func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"code": 0,
+			"msg":  "ok",
+			"data": gin.H{},
+		})
+	}
+
+	r.GET("/api/v2/view/", view_root)
+	r.POST("/api/v2/view/", view_root)
+
 	webapi := &WebAPI{
 		SvRecord: svRecord,
 		SvView:   svView,
