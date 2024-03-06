@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"errors"
-	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -128,7 +127,8 @@ func (m *MongoDBManager) CountUniqueValueInDuration(coll_name string, field_name
 	pipeline := bson.A{
 		bson.D{{Key: "$match", Value: bson.D{{Key: time_field_name, Value: bson.D{{Key: "$gte", Value: start_time}, {Key: "$lte", Value: end_time}}}}}},
 		bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: "$" + field_name}}}},
-		bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: nil}, {Key: "count", Value: bson.D{{Key: "$sum", Value: 1}}}}}},
+		// $count
+		bson.D{{Key: "$count", Value: "count"}},
 	}
 
 	cursor, err := coll.Aggregate(context.TODO(), pipeline)
@@ -170,8 +170,6 @@ func (m *MongoDBManager) AggregationValueAmountInDuration(coll_name string, fiel
 	if err = cursor.All(context.Background(), &result); err != nil {
 		return dto.AggregationValueAmountDTO{}, err
 	}
-
-	fmt.Println(result)
 
 	var resultData []dto.ValueAmount
 

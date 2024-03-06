@@ -158,6 +158,7 @@ func BindPath(r *gin.Engine, sv *view.RealTimeDataService) {
 	r.GET("/api/v2/view/realtime/count_event", CommonUniqueValueCountingGeneric(sv, dao.DIRECT_USAGE_EVENT_COLLECTION_NAME, "data.basic.rid", "time"))
 	r.GET("/api/v2/view/realtime/count_function", CommonUniqueValueCountingGeneric(sv, dao.DIRECT_USAGE_FUNCTION_COLLECTION_NAME, "data.basic.rid", "time"))
 	r.GET("/api/v2/view/realtime/count_plugin_install", CommonUniqueValueCountingGeneric(sv, dao.DIRECT_PLUGIN_INSTALL_COLLECTION_NAME, "data.basic.rid", "time"))
+	r.GET("/api/v2/view/realtime/count_session_id", CommonUniqueValueCountingGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.session_info.id", "time"))
 
 	r.GET("/api/v2/view/realtime/count_active_instance", CommonUniqueValueCountingGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.basic.instance_id", "time"))
 	r.GET("/api/v2/view/realtime/count_active_host", CommonUniqueValueCountingGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.basic.host_id", "time"))
@@ -169,4 +170,6 @@ func BindPath(r *gin.Engine, sv *view.RealTimeDataService) {
 	r.GET("/api/v2/view/realtime/get_session_type_amount", CommonAggragationValueAmountGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.session_info.type", "time"))
 	// data.query_info.model_name
 	r.GET("/api/v2/view/realtime/get_model_name_amount", CommonAggragationValueAmountGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.query_info.model_name", "time"))
+	// data.session_info.id
+	r.GET("/api/v2/view/realtime/get_session_id_amount", CommonAggragationValueAmountGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.session_info.id", "time"))
 }
