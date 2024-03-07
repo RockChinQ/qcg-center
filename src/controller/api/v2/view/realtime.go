@@ -119,6 +119,10 @@ func CommonUniqueValueCountingGeneric(
 			"data": gin.H{
 				"count": count,
 			},
+			"time": gin.H{
+				"start_time": start_time,
+				"end_time":   end_time,
+			},
 		})
 	}
 }
@@ -148,6 +152,10 @@ func CommonAggragationValueAmountGeneric(
 			"code": 0,
 			"msg":  "ok",
 			"data": result,
+			"time": gin.H{
+				"start_time": start_time,
+				"end_time":   end_time,
+			},
 		})
 	}
 }
