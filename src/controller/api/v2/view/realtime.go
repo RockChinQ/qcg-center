@@ -171,6 +171,10 @@ func BindPath(r *gin.Engine, sv *view.RealTimeDataService) {
 	r.GET("/api/v2/view/realtime/count_active_instance", CommonUniqueValueCountingGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.basic.instance_id", "time"))
 	r.GET("/api/v2/view/realtime/count_active_host", CommonUniqueValueCountingGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.basic.host_id", "time"))
 
+	r.GET("/api/v2/view/realtime/count_new_instance", CommonUniqueValueCountingGeneric(sv, dao.ANALYSIS_HOST_INSTANCE_IP_COLLECTION_NAME, "instance_id", "created_at"))
+	r.GET("/api/v2/view/realtime/count_new_host", CommonUniqueValueCountingGeneric(sv, dao.ANALYSIS_HOST_INSTANCE_IP_COLLECTION_NAME, "host_id", "created_at"))
+	r.GET("/api/v2/view/realtime/count_new_ip", CommonUniqueValueCountingGeneric(sv, dao.ANALYSIS_IP_COLLECTION_NAME, "ip", "created_at"))
+
 	r.GET("/api/v2/view/realtime/get_os_amount", CommonAggragationValueAmountGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.basic.platform", "time"))
 	r.GET("/api/v2/view/realtime/get_version_amount", CommonAggragationValueAmountGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.basic.semantic_version", "time"))
 	r.GET("/api/v2/view/realtime/get_platform_amount", CommonAggragationValueAmountGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.runtime.msg_source", "time"))
@@ -180,4 +184,6 @@ func BindPath(r *gin.Engine, sv *view.RealTimeDataService) {
 	r.GET("/api/v2/view/realtime/get_model_name_amount", CommonAggragationValueAmountGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.query_info.model_name", "time"))
 	// data.session_info.id
 	r.GET("/api/v2/view/realtime/get_session_id_amount", CommonAggragationValueAmountGeneric(sv, dao.DIRECT_USAGE_QUERY_COLLECTION_NAME, "data.session_info.id", "time"))
+	// IP 分布
+	r.GET("/api/v2/view/realtime/get_ip_country_amount", CommonAggragationValueAmountGeneric(sv, dao.ANALYSIS_IP_COLLECTION_NAME, "country", "created_at"))
 }
