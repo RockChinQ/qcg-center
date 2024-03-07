@@ -1,6 +1,33 @@
-package entities
+// DTO
+package dto
 
-type MainUpdate struct {
+// v2 common
+type BasicInfo struct {
+	RID             string `form:"rid" json:"rid" bson:"rid" binding:"required"`
+	InstanceID      string `form:"instance_id" json:"instance_id" bson:"instance_id" binding:"required"`
+	HostID          string `form:"host_id" json:"host_id" bson:"host_id" binding:"required"`
+	SemanticVersion string `form:"semantic_version" json:"semantic_version" bson:"semantic_version" binding:"required"`
+	Platform        string `form:"platform" json:"platform" bson:"platform" binding:"required"`
+}
+
+type RuntimeInfo struct {
+	AccountID string `form:"account_id" json:"account_id" bson:"account_id" binding:"required"`
+	AdminID   string `form:"admin_id" json:"admin_id" bson:"admin_id" binding:"required"`
+	MsgSource string `form:"msg_source" json:"msg_source" bson:"msg_source" binding:"required"`
+}
+
+type PluginInfo struct {
+	Name    string `form:"name" json:"name" bson:"name" binding:"required"`
+	Remote  string `form:"remote" json:"remote" bson:"remote"`
+	Author  string `form:"author" json:"author" bson:"author" binding:"required"`
+	Version string `form:"version" json:"version" bson:"version" binding:"required"`
+}
+
+type RecordDTO struct {
+}
+
+// v2 dto
+type MainUpdateDTO struct {
 	Basic      BasicInfo `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	UpdateInfo struct {
 		SpentSeconds int    `form:"spent_seconds" json:"spent_seconds" bson:"spent_seconds" binding:"required"`
@@ -10,14 +37,14 @@ type MainUpdate struct {
 	} `form:"update_info" json:"update_info" bson:"update_info" binding:"required"`
 }
 
-type MainAnnouncement struct {
+type MainAnnouncementDTO struct {
 	Basic            BasicInfo `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	AnnouncementInfo struct {
 		IDs []int `form:"ids" json:"ids" bson:"ids" binding:"required"`
 	} `form:"announcement_info" json:"announcement_info" bson:"announcement_info" binding:"required"`
 }
 
-type UsageQuery struct {
+type UsageQueryDTO struct {
 	Basic       BasicInfo   `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	Runtime     RuntimeInfo `form:"runtime" json:"runtime" bson:"runtime" binding:"required"`
 	SessionInfo struct {
@@ -33,7 +60,7 @@ type UsageQuery struct {
 	} `form:"query_info" json:"query_info" bson:"query_info" binding:"required"`
 }
 
-type UsageEvent struct {
+type UsageEventDTO struct {
 	Basic     BasicInfo    `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	Plugins   []PluginInfo `form:"plugins" json:"plugins" bson:"plugins" binding:"required"`
 	EventInfo struct {
@@ -41,7 +68,7 @@ type UsageEvent struct {
 	} `form:"event_info" json:"event_info" bson:"event_info" binding:"required"`
 }
 
-type UsageFunction struct {
+type UsageFunctionDTO struct {
 	Basic        BasicInfo  `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	Plugin       PluginInfo `form:"plugin" json:"plugin" bson:"plugin" binding:"required"`
 	FunctionInfo struct {
@@ -50,17 +77,17 @@ type UsageFunction struct {
 	} `form:"function_info" json:"function_info" bson:"function_info" binding:"required"`
 }
 
-type PluginInstall struct {
+type PluginInstallDTO struct {
 	Basic  BasicInfo  `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	Plugin PluginInfo `form:"plugin" json:"plugin" bson:"plugin" binding:"required"`
 }
 
-type PluginRemove struct {
+type PluginRemoveDTO struct {
 	Basic  BasicInfo  `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	Plugin PluginInfo `form:"plugin" json:"plugin" bson:"plugin" binding:"required"`
 }
 
-type PluginUpdate struct {
+type PluginUpdateDTO struct {
 	Basic      BasicInfo  `form:"basic" json:"basic" bson:"basic" binding:"required"`
 	Plugin     PluginInfo `form:"plugin" json:"plugin" bson:"plugin" binding:"required"`
 	UpdateInfo struct {

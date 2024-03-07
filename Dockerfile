@@ -1,4 +1,4 @@
-FROM golang:1.18.10-bullseye
+FROM golang:1.21.7-bullseye
 
 WORKDIR /app/qcg-center
 
