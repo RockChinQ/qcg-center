@@ -35,14 +35,7 @@ func getBasicInfo(recordDTO interface{}) (dto.BasicInfo, error) {
 	return basic.Interface().(dto.BasicInfo), nil
 }
 
-func (s *RecordService) InsertRecord(c *gin.Context, recordDTO interface{}) error {
-	basic, err := getBasicInfo(recordDTO)
-
-	if err != nil {
-		return err
-	}
-
-	// 取出IP
+func GetRemoteAddr(c *gin.Context) string {
 	remoteAddr := c.Request.Header.Get("x-forwarded-for")
 
 	if remoteAddr == "" {
@@ -53,6 +46,19 @@ func (s *RecordService) InsertRecord(c *gin.Context, recordDTO interface{}) erro
 		// 只取IP
 		remoteAddr = remoteAddrSlice[0]
 	}
+
+	return remoteAddr
+}
+
+func (s *RecordService) InsertRecord(c *gin.Context, recordDTO interface{}) error {
+	basic, err := getBasicInfo(recordDTO)
+
+	if err != nil {
+		return err
+	}
+
+	// 取出IP
+	remoteAddr := GetRemoteAddr(c)
 
 	// 插入 IP 地理信息
 	ipGeoByte, err := util.GetIPGeoJSONBytes(remoteAddr)

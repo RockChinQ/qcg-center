@@ -4,6 +4,7 @@ import (
 	"log"
 	"strconv"
 
+	"qcg-center/src/controller/api/legacy"
 	"qcg-center/src/controller/api/v2/record"
 	"qcg-center/src/controller/api/v2/view"
 	serviceRecord "qcg-center/src/service/record"
@@ -34,6 +35,8 @@ func NewWebAPI(svRecord *serviceRecord.RecordService, svView *serviceView.RealTi
 	record.BindPath(r, svRecord)
 
 	view.BindPath(r, svView)
+
+	legacy.BindPath(r, svRecord)
 
 	view_root := func(c *gin.Context) {
 		c.JSON(200, gin.H{
