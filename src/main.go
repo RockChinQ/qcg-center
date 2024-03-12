@@ -5,6 +5,7 @@ import (
 	"os"
 	"qcg-center/src/controller/api"
 	"qcg-center/src/dao"
+	serviceFetch "qcg-center/src/service/fetch"
 	serviceRecord "qcg-center/src/service/record"
 	serviceView "qcg-center/src/service/view"
 	"qcg-center/src/util"
@@ -44,9 +45,10 @@ func main() {
 	// 初始化服务
 	svRecord := serviceRecord.NewRecordService(dbmgr)
 	svView := serviceView.NewRealTimeDataService(dbmgr)
+	svFetch := serviceFetch.NewFetchService()
 
 	// 初始化API管理器
-	apimgr := api.NewWebAPI(svRecord, svView, cfg.API.Port, cfg.API.Listen)
+	apimgr := api.NewWebAPI(svRecord, svView, svFetch, cfg.API.Port, cfg.API.Listen)
 
 	// 初始化routines
 	// InitializeRoutines(cfg, dbmgr)

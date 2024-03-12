@@ -5,8 +5,10 @@ import (
 	"strconv"
 
 	"qcg-center/src/controller/api/legacy"
+	"qcg-center/src/controller/api/v2/fetch"
 	"qcg-center/src/controller/api/v2/record"
 	"qcg-center/src/controller/api/v2/view"
+	serviceFetch "qcg-center/src/service/fetch"
 	serviceRecord "qcg-center/src/service/record"
 	serviceView "qcg-center/src/service/view"
 
@@ -29,12 +31,14 @@ type WebAPI struct {
 	R *gin.Engine
 }
 
-func NewWebAPI(svRecord *serviceRecord.RecordService, svView *serviceView.RealTimeDataService, port int, addr string) *WebAPI {
+func NewWebAPI(svRecord *serviceRecord.RecordService, svView *serviceView.RealTimeDataService, svFetch *serviceFetch.FetchService, port int, addr string) *WebAPI {
 	r := gin.Default()
 
 	record.BindPath(r, svRecord)
 
 	view.BindPath(r, svView)
+
+	fetch.BindPath(r, svFetch)
 
 	legacy.BindPath(r, svRecord)
 
