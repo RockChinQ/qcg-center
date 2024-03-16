@@ -6,7 +6,7 @@
         {
             "name": "default",
             "token_mgr": "openai",
-            "requester": "openai-chat-completion",
+            "requester": "openai-chat-completions",
             "tool_call_supported": false
         },
         {
