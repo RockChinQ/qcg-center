@@ -20,7 +20,9 @@ func BindPath(r *gin.Engine, sv *fetchsv.FetchService) {
 		ctx.JSON(200, gin.H{
 			"code": 0,
 			"msg":  "ok",
-			"data": modelList,
+			"data": gin.H{
+				"list": modelList,
+			},
 		})
 	})
 }
