@@ -1,12 +1,13 @@
 {
     "versions": [
-        "v3.0.2"
+        "v3.0.2",
+        "v3.1.0"
     ],
     "models": [
         {
             "name": "default",
-            "token_mgr": "openai",
             "requester": "openai-chat-completions",
+            "token_mgr": "openai",
             "tool_call_supported": false
         },
         {
@@ -26,12 +27,27 @@
             "tool_call_supported": true
         },
         {
-            "name": "OneAPI/SparkDesk",
-            "model_name": "SparkDesk"
+            "model_name": "SparkDesk",
+            "name": "OneAPI/SparkDesk"
         },
         {
-            "name": "OneAPI/gemini-pro",
-            "model_name": "gemini-pro"
+            "model_name": "gemini-pro",
+            "name": "OneAPI/gemini-pro"
+        },
+        {
+            "name": "claude-3-opus-20240229",
+            "requester": "anthropic-messages",
+            "token_mgr": "anthropic"
+        },
+        {
+            "name": "claude-3-sonnet-20240229",
+            "requester": "anthropic-messages",
+            "token_mgr": "anthropic"
+        },
+        {
+            "name": "claude-3-haiku-20240307",
+            "requester": "anthropic-messages",
+            "token_mgr": "anthropic"
         }
     ]
 }
