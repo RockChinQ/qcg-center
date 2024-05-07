@@ -1,8 +1,6 @@
 {
     "versions": [
-        "v3.0.2",
-        "v3.1.0",
-        "default"
+        "v3.1.1"
     ],
     "models": [
         {
@@ -96,6 +94,11 @@
             "name": "moonshot-v1-128k",
             "requester": "moonshot-chat-completions",
             "token_mgr": "moonshot"
+        },
+        {
+            "name": "deepseek-chat",
+            "requester": "deepseek-chat-completions",
+            "token_mgr": "deepseek"
         }
     ]
 }

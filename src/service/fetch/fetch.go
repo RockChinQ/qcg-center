@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,7 +47,6 @@ func NewFetchService() *FetchService {
 
 		for _, version := range modelList.Versions {
 			cachedModelList[version] = modelList.Models
-			cachedModelList["latest"] = modelList.Models
 		}
 	}
 
@@ -56,9 +56,19 @@ func NewFetchService() *FetchService {
 }
 
 func (s *FetchService) FetchModelList(c *gin.Context, version string) ([]interface{}, error) {
-	if _, ok := s.CachedModelList[version]; !ok {
-		return s.CachedModelList["latest"], nil
-	} else {
-		return s.CachedModelList[version], nil
+	// if _, ok := s.CachedModelList[version]; !ok {
+	// 	return s.CachedModelList["default"], nil
+	// } else {
+	// 	return s.CachedModelList[version], nil
+	// }
+
+	for k, v := range s.CachedModelList {
+		// 如果version是以key开头的
+		if k == version || strings.HasPrefix(version, k+".") {
+			return v, nil
+		}
 	}
+
+	// 如果没有找到对应的版本，就返回默认的模型列表
+	return s.CachedModelList["default"], nil
 }
