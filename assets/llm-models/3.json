@@ -1,0 +1,123 @@
+{
+    "versions": [
+        "v3.2.0"
+    ],
+    "models": [
+        
+        {
+            "name": "default",
+            "requester": "openai-chat-completions",
+            "token_mgr": "openai",
+            "tool_call_supported": false,
+            "vision_supported": false
+        },
+        {
+            "name": "gpt-3.5-turbo-0125",
+            "tool_call_supported": true,
+            "vision_supported": false
+        },
+        {
+            "name": "gpt-3.5-turbo",
+            "tool_call_supported": true,
+            "vision_supported": false
+        },
+        {
+            "name": "gpt-3.5-turbo-1106",
+            "tool_call_supported": true,
+            "vision_supported": false
+        },
+        {
+            "name": "gpt-4-turbo",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4-turbo-2024-04-09",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4-turbo-preview",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4-0125-preview",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4-1106-preview",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4o",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4-0613",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4-32k",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "name": "gpt-4-32k-0613",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
+            "model_name": "SparkDesk",
+            "name": "OneAPI/SparkDesk"
+        },
+        {
+            "model_name": "gemini-pro",
+            "name": "OneAPI/gemini-pro"
+        },
+        {
+            "name": "claude-3-opus-20240229",
+            "requester": "anthropic-messages",
+            "token_mgr": "anthropic"
+        },
+        {
+            "name": "claude-3-sonnet-20240229",
+            "requester": "anthropic-messages",
+            "token_mgr": "anthropic"
+        },
+        {
+            "name": "claude-3-haiku-20240307",
+            "requester": "anthropic-messages",
+            "token_mgr": "anthropic"
+        },
+        {
+            "name": "moonshot-v1-8k",
+            "requester": "moonshot-chat-completions",
+            "token_mgr": "moonshot"
+        },
+        {
+            "name": "moonshot-v1-32k",
+            "requester": "moonshot-chat-completions",
+            "token_mgr": "moonshot"
+        },
+        {
+            "name": "moonshot-v1-128k",
+            "requester": "moonshot-chat-completions",
+            "token_mgr": "moonshot"
+        },
+        {
+            "name": "deepseek-chat",
+            "requester": "deepseek-chat-completions",
+            "token_mgr": "deepseek"
+        }
+    ]
+}
