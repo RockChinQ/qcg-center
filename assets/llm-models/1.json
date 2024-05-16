@@ -1,8 +1,7 @@
 {
     "versions": [
         "v3.0.2",
-        "v3.1.0",
-        "default"
+        "v3.1.0"
     ],
     "models": [
         {

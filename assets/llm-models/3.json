@@ -1,6 +1,7 @@
 {
     "versions": [
-        "v3.2.0"
+        "v3.2.0",
+        "default"
     ],
     "models": [
         
@@ -102,17 +103,20 @@
         {
             "name": "moonshot-v1-8k",
             "requester": "moonshot-chat-completions",
-            "token_mgr": "moonshot"
+            "token_mgr": "moonshot",
+            "tool_call_supported": true
         },
         {
             "name": "moonshot-v1-32k",
             "requester": "moonshot-chat-completions",
-            "token_mgr": "moonshot"
+            "token_mgr": "moonshot",
+            "tool_call_supported": true
         },
         {
             "name": "moonshot-v1-128k",
             "requester": "moonshot-chat-completions",
-            "token_mgr": "moonshot"
+            "token_mgr": "moonshot",
+            "tool_call_supported": true
         },
         {
             "name": "deepseek-chat",
