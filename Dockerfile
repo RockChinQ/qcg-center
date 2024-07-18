@@ -3,6 +3,7 @@ FROM debian:12-slim
 WORKDIR /app
 
 COPY ./bin/qcg-center .
+COPY ./assets/ ./assets/
 
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
