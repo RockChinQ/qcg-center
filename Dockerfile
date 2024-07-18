@@ -1,14 +1,8 @@
-FROM golang:1.21.7-bullseye
+FROM debian:12-slim
 
-WORKDIR /app/qcg-center
+WORKDIR /app
 
-COPY . .
-
-RUN go mod download
-
-RUN go build -o qcg-center src/main.go
-
-RUN chmod +x ./qcg-center
+COPY ./bin/qcg-center .
 
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
@@ -18,4 +12,4 @@ RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-CMD ["./qcg-center"]
+CMD ["bash", "-c", "./qcg-center"]
