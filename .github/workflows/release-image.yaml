@@ -23,7 +23,7 @@ jobs:
             go-version: 1.21
     
         - name: Build Binary
-          run: go build -o bin/qcg-center .
+          run: go build -o bin/qcg-center src/main.go
 
         - name: Build
           run: docker build -t rockchin/qcg-center:latest .
