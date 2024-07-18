@@ -7,6 +7,8 @@ on:
     paths:
       - src/**.go
       - assets/**.json
+      - Dockerfile
+      - .github/workflows/release-image.yaml
 
 jobs:
     build:
