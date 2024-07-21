@@ -2,6 +2,7 @@
     "versions": [
         "v3.2.0",
         "v3.2.1",
+        "v3.2",
         "default"
     ],
     "models": [
@@ -79,6 +80,11 @@
             "vision_supported": true
         },
         {
+            "name": "gpt-4o-mini",
+            "tool_call_supported": true,
+            "vision_supported": true
+        },
+        {
             "model_name": "SparkDesk",
             "name": "OneAPI/SparkDesk"
         },
@@ -105,6 +111,12 @@
             "vision_supported": true
         },
         {
+            "name": "claude-3-5-sonnet-20240620",
+            "requester": "anthropic-messages",
+            "token_mgr": "anthropic",
+            "vision_supported": true
+        },
+        {
             "name": "moonshot-v1-8k",
             "requester": "moonshot-chat-completions",
             "token_mgr": "moonshot",
@@ -124,6 +136,11 @@
         },
         {
             "name": "deepseek-chat",
+            "requester": "deepseek-chat-completions",
+            "token_mgr": "deepseek"
+        },
+        {
+            "name": "deepseek-coder",
             "requester": "deepseek-chat-completions",
             "token_mgr": "deepseek"
         }
