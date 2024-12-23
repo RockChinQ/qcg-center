@@ -117,12 +117,8 @@
         {
             "name": "deepseek-chat",
             "requester": "deepseek-chat-completions",
-            "token_mgr": "deepseek"
-        },
-        {
-            "name": "deepseek-coder",
-            "requester": "deepseek-chat-completions",
-            "token_mgr": "deepseek"
+            "token_mgr": "deepseek",
+            "tool_call_supported": true
         }
     ]
 }
